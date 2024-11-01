@@ -1,16 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+// App.tsx ou arquivo de rotas equivalente
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Contact } from "./components/Contact";
 import { Calendar } from "./components/Calender";
-import "./css/index.css";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<Contact />} />
-        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/calender" element={<Calendar />} />
+        {/* Outras rotas */}
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 

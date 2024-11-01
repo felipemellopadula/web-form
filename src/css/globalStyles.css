@@ -25,4 +25,7 @@
 body {
   background-color: var(--mode);
   scroll-behavior: smooth;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

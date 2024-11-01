@@ -1,177 +1,417 @@
 .container {
-  container: main / inline-size;
-  width: 100svw;
-  height: 100svh;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
 
-  .maincontainer {
-    display: grid;
-    grid-template-columns: 60% 40%;
-    width: 100%;
+.maincontainer {
+  width: 100%;
+  height: auto;
+  max-width: 75rem;
+  background: white;
+  border-radius: 0.625rem;
+  box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.1);
+  display: flex;
+  overflow: hidden;
+  font-family: var(--font-family1);
+  margin: 20px 0;
+}
+
+.leftSide {
+  flex: 1;
+  background: linear-gradient(135deg, #ffc936 0%, #ff5b0ef8 70%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  font-weight: var(--font-weight3);
+  height: auto;
+
+  .content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 100%;
 
-    @container main (max-width: 64rem) {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-    }
-
-    .leftSide {
-      --font-family1: "Open Sans", sans-serif;
-      font-weight: 700;
-      grid-column: 1 / 2;
-      background-color: #d0dcf0;
-
-      @container main (max-width: 64rem) {
-        grid-column: 1;
-        grid-row: 1;
-        padding: 2rem 0;
-      }
-
-      .content {
-        display: flex;
-        align-items: flex-start;
-        flex-direction: column;
-        justify-content: center;
-        width: 50%;
-        margin: 0 auto;
-        height: 100%;
-        gap: 1.5rem;
-
-        @container main (max-width: 75rem) {
-          width: 70%;
-        }
-
-        @container main (max-width: 64rem) {
-          width: 90%;
-          height: auto;
-          align-items: center;
-          text-align: center;
-        }
-      }
-
-      h1 {
-        font-size: clamp(2rem, 0.405rem + 2.883vw, 3rem);
-        font-family: var(--font-family1);
-        font-weight: var(--font-weight3);
-      }
+    h1 {
+      font-size: clamp(1.8rem, 1.3rem + 1.333vw, 2.5rem);
+      margin-bottom: 20px;
+      line-height: 1.2;
     }
 
     video {
-      width: 90%;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+  }
+}
 
-      @container main (max-width: 64rem) {
-        width: 100%;
+.rightSide {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: auto;
+}
+
+.contactFormContainer {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px 0;
+  height: auto;
+
+  .title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  max-width: 85%;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.inputGroup {
+  width: 100%;
+  position: relative;
+  margin-bottom: 1.5rem;
+
+  .errorMessage {
+    color: #ff4444;
+    font-size: 0.8rem;
+    position: absolute;
+    bottom: -1.2rem;
+    left: 0;
+    width: 100%;
+  }
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fff;
+
+  &:focus {
+    outline: none;
+    border-color: #4169e1;
+    box-shadow: 0 0 0 2px rgba(65, 105, 225, 0.2);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: #4169e1;
+  }
+
+  &.error {
+    border-color: #ff4444;
+    background-color: #fff9f9;
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
+    }
+  }
+
+  &::placeholder {
+    color: #999;
+  }
+}
+
+.textarea {
+  min-height: 120px;
+  max-height: 300px;
+  resize: vertical;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #1f1f1f 0%, #0f1c41 100%);
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  width: 110%;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0 auto;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(65, 105, 225, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background: linear-gradient(135deg, #cccccc 0%, #999999 100%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+  }
+
+  &:not(:disabled)::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: radial-gradient(
+        circle,
+        transparent 1%,
+        rgba(255, 255, 255, 0.1) 1%
+      )
+      center/15000%;
+    opacity: 0;
+    transition: all 0.5s ease;
+  }
+
+  &:not(:disabled):active::after {
+    opacity: 1;
+    background-size: 100%;
+    transition: 0s;
+  }
+}
+
+.loadingSpinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-left: 10px;
+}
+
+.copyright {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  text-align: center;
+  width: 100%;
+
+  .logoContainer {
+    margin-bottom: 15px;
+
+    a {
+      display: inline-block;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
       }
     }
 
-    .rightSide {
-      background-color: black;
+    .logo {
+      height: 3rem;
+      width: auto;
+      object-fit: contain;
+    }
+  }
 
-      @container main (max-width: 1024px) {
-        grid-column: 1;
-        grid-row: 2;
+  p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+
+  .socialIcons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+
+    .socialIcon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f05e09 0%, #f05e09 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(65, 105, 225, 0.3);
       }
 
-      .contactFormContainer {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        max-width: 31.25rem;
-        margin: 0 auto;
-        padding: 40px;
-        color: #e4e4e4;
-        font-family: Arial, sans-serif;
-
-        @container main (max-width: 768px) {
-          padding: 20px;
-        }
-      }
-
-      .title {
-        font-size: clamp(1rem, 1.351rem + 0.721vw, 2rem);
-        font-weight: bold;
-        margin-bottom: 30px;
-
-        @container main (max-width: 768px) {
-          font-size: 28px;
-          margin-bottom: 20px;
-        }
-      }
-
-      .form {
-        max-width: 90%;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-
-        @container main (max-width: 768px) {
-          gap: 15px;
-        }
-      }
-
-      .select,
-      .input,
-      .textarea {
-        width: 100%;
-        padding: 12px;
-        background-color: black;
-        border: none;
-        border-bottom: 1px solid #333;
-        color: #ffffff;
-        font-size: 16px;
-
-        @container main (max-width: 768px) {
-          padding: 10px;
-          font-size: 14px;
-        }
-
-        &:focus {
-          outline: none;
-          border-bottom-color: #ff6d0c;
-        }
-
-        &::placeholder {
-          color: #666;
-        }
-      }
-
-      .select {
-        appearance: none;
-        background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-        background-repeat: no-repeat;
-        background-position: right 10px top 50%;
-        padding-right: 30px;
-      }
-
-      .textarea {
-        min-height: 100px;
-        resize: vertical;
-
-        @container main (max-width: 768px) {
-          min-height: 80px;
-        }
-      }
-
-      .submitButton {
-        align-self: flex-start;
-        padding: 12px 24px;
-        background-color: #333;
-        color: #fff;
-        border: none;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-
-        @container main (max-width: 768px) {
-          padding: 10px 20px;
-          font-size: 14px;
-        }
-
-        &:hover {
-          background-color: #444;
-        }
+      svg {
+        width: 18px;
+        height: 18px;
       }
     }
+  }
+}
+
+// Animações
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-3px);
+  }
+  40%,
+  60% {
+    transform: translateX(3px);
+  }
+}
+
+// Media Queries
+@media (max-width: 968px) {
+  .container {
+    padding: 10px;
+  }
+
+  .maincontainer {
+    flex-direction: column;
+    margin: 10px 0;
+  }
+
+  .leftSide,
+  .rightSide {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .content {
+    h1 {
+      font-size: 1.8rem;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 5px;
+  }
+
+  .maincontainer {
+    margin: 5px 0;
+  }
+
+  .leftSide,
+  .rightSide {
+    padding: 15px;
+  }
+
+  .content {
+    h1 {
+      font-size: 1.4rem;
+    }
+  }
+
+  .form {
+    width: 100%;
+  }
+
+  .submitButton {
+    padding: 12px 25px;
+    font-size: 0.9rem;
+  }
+
+  .copyright {
+    .logoContainer .logo {
+      height: 2.5rem;
+    }
+
+    p {
+      font-size: 0.8rem;
+    }
+
+    .socialIcons .socialIcon {
+      width: 30px;
+      height: 30px;
+
+      svg {
+        width: 15px;
+        height: 15px;
+      }
+    }
+  }
+}
+
+@media (max-height: 37.5rem) {
+  .container {
+    height: auto;
+    padding: 10px;
+  }
+
+  .maincontainer {
+    margin: 5px 0;
+  }
+
+  .textarea {
+    min-height: 80px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    padding: 40px;
+  }
+
+  .maincontainer {
+    max-width: 80rem;
   }
 }

@@ -1,161 +1,323 @@
+// Contact.tsx
+import { useState } from "react";
 import styles from "./ContactForm.module.scss";
-import videoBg from "../../assets/ani02-3.mp4";
-import { useState, ChangeEvent, FormEvent } from "react";
+import emailjs from "@emailjs/browser";
+import { FaInstagram, FaFacebookF } from "react-icons/fa";
+import logoUnity from "../../assets/Logo_Unity.png";
+import videoForm from "../../assets/ani02-3.mp4";
+import { useInView } from "react-intersection-observer";
+import { motion } from "framer-motion";
+// Importe o useNavigate
 import { useNavigate } from "react-router-dom";
 
 interface FormData {
   nome: string;
   email: string;
-  celular: string;
+  telefone: string;
   empresa: string;
   mensagem: string;
 }
 
-export const Contact = () => {
-  const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+interface FormErrors {
+  nome?: string;
+  email?: string;
+  telefone?: string;
+  empresa?: string;
+  mensagem?: string;
+}
+
+export const Contact: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     nome: "",
     email: "",
-    celular: "",
+    telefone: "",
     empresa: "",
     mensagem: "",
   });
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formTouched, setFormTouched] = useState(false);
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
 
-    // Validação específica para o campo de celular
-    if (name === "celular") {
-      // Remove tudo que não for número
-      const numbersOnly = value.replace(/\D/g, "");
+  // Inicialize o navigate
+  const navigate = useNavigate();
 
-      // Formata o número de telefone (XX) XXXXX-XXXX
-      let formattedNumber = "";
-      if (numbersOnly.length <= 11) {
-        formattedNumber = numbersOnly.replace(
-          /(\d{2})(\d{5})(\d{4})/,
-          "($1) $2-$3"
+  // Remova a inicialização do EmailJS do useEffect, pois não é mais necessário
+  // emailjs.init() não é mais recomendado
+
+  const validateForm = (): FormErrors => {
+    const newErrors: FormErrors = {};
+
+    if (!formData.nome.trim()) {
+      newErrors.nome = "Nome é obrigatório";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email é obrigatório";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email inválido";
+    }
+
+    if (!formData.telefone.trim()) {
+      newErrors.telefone = "Telefone é obrigatório";
+    }
+
+    if (!formData.empresa.trim()) {
+      newErrors.empresa = "Empresa é obrigatória";
+    }
+
+    if (!formData.mensagem.trim()) {
+      newErrors.mensagem = "Mensagem é obrigatória";
+    }
+
+    return newErrors;
+  };
+
+  const isFormValid = () => {
+    const currentErrors = validateForm();
+    return Object.keys(currentErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormTouched(true);
+
+    const formErrors = validateForm();
+    setErrors(formErrors);
+
+    if (Object.keys(formErrors).length === 0) {
+      setIsSubmitting(true);
+
+      try {
+        const templateParams = {
+          from_name: formData.nome,
+          from_email: formData.email,
+          phone: formData.telefone,
+          company: formData.empresa,
+          message: formData.mensagem,
+        };
+
+        await emailjs.send(
+          "service_d01tocr",
+          "template_3ku2c5w",
+          templateParams,
+          "I6CDkyIieBMlS_ptU"
         );
-      }
 
-      setFormData({ ...formData, [name]: formattedNumber });
-    } else {
-      setFormData({ ...formData, [name]: value });
+        alert("Mensagem enviada com sucesso!");
+        setFormData({
+          nome: "",
+          email: "",
+          telefone: "",
+          empresa: "",
+          mensagem: "",
+        });
+        setFormTouched(false);
+
+        // Redirecione para o componente Calender
+        navigate("/calender");
+      } catch (error) {
+        console.error("Erro ao enviar formulário:", error);
+        alert("Erro ao enviar mensagem. Por favor, tente novamente.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setFormTouched(true);
 
-    try {
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-
-      await fetch("https://formsubmit.co/felipe@unitycomunicacao.com", {
-        method: "POST",
-        body: formData,
-      });
-
-      navigate("/calendar");
-    } catch (error) {
-      console.error("Erro ao enviar formulário:", error);
-    } finally {
-      setIsSubmitting(false);
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
     }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
   };
 
   return (
-    <section className={styles.container}>
+    <motion.section
+      className={styles.container}
+      ref={ref}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      variants={containerVariants}
+    >
       <div className={styles.maincontainer}>
         <div className={styles.leftSide}>
           <div className={styles.content}>
-            <h1>Descubra como podemos ajudar o seu negócio.</h1>
-            <video src={videoBg} autoPlay muted loop playsInline></video>
+            <h1>Vamos começar um projeto juntos?</h1>
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster="/path-to-poster-image.jpg"
+            >
+              <source src={videoForm} type="video/mp4" />
+              Seu navegador não suporta o elemento de vídeo.
+            </video>
           </div>
         </div>
+
         <div className={styles.rightSide}>
           <div className={styles.contactFormContainer}>
-            <h1 className={styles.title}>Vamos conversar?</h1>
-            <form
-              onSubmit={handleSubmit}
-              className={styles.form}
-              action="https://formsubmit.co/felipe@unitycomunicacao.com"
-              method="POST"
-            >
-              <input type="hidden" name="_captcha" value="false" />
-              <input type="hidden" name="_template" value="table" />
-              <input
-                type="hidden"
-                name="_next"
-                value="https://www.unitycomunicacao.com"
-              />
-              <input
-                type="hidden"
-                name="_subject"
-                value="Nova Mensagem de Contato - Unity Comunicação"
-              />
+            <h2 className={styles.title}>Entre em Contato</h2>
 
-              <input
-                type="text"
-                name="nome"
-                placeholder="Nome"
-                value={formData.nome}
-                onChange={handleChange}
-                className={styles.input}
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-                className={styles.input}
-                required
-              />
-              <input
-                type="tel"
-                name="celular"
-                placeholder="Celular (XX) XXXXX-XXXX"
-                value={formData.celular}
-                onChange={handleChange}
-                className={styles.input}
-                maxLength={15}
-                pattern="\(\d{2}\)\s\d{5}-\d{4}"
-                required
-              />
-              <input
-                type="text"
-                name="empresa"
-                placeholder="Empresa"
-                value={formData.empresa}
-                onChange={handleChange}
-                className={styles.input}
-                required
-              />
-              <textarea
-                name="mensagem"
-                placeholder="Mensagem"
-                value={formData.mensagem}
-                onChange={handleChange}
-                className={styles.textarea}
-                required
-              />
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  name="nome"
+                  placeholder="Nome"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  className={`${styles.input} ${
+                    errors.nome ? styles.error : ""
+                  }`}
+                />
+                {errors.nome && (
+                  <span className={styles.errorMessage}>{errors.nome}</span>
+                )}
+              </div>
+
+              <div className={styles.inputGroup}>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`${styles.input} ${
+                    errors.email ? styles.error : ""
+                  }`}
+                />
+                {errors.email && (
+                  <span className={styles.errorMessage}>{errors.email}</span>
+                )}
+              </div>
+
+              <div className={styles.inputGroup}>
+                <input
+                  type="tel"
+                  name="telefone"
+                  placeholder="Telefone"
+                  value={formData.telefone}
+                  onChange={handleChange}
+                  className={`${styles.input} ${
+                    errors.telefone ? styles.error : ""
+                  }`}
+                />
+                {errors.telefone && (
+                  <span className={styles.errorMessage}>{errors.telefone}</span>
+                )}
+              </div>
+
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  name="empresa"
+                  placeholder="Empresa"
+                  value={formData.empresa}
+                  onChange={handleChange}
+                  className={`${styles.input} ${
+                    errors.empresa ? styles.error : ""
+                  }`}
+                />
+                {errors.empresa && (
+                  <span className={styles.errorMessage}>{errors.empresa}</span>
+                )}
+              </div>
+
+              <div className={styles.inputGroup}>
+                <textarea
+                  name="mensagem"
+                  placeholder="Mensagem"
+                  value={formData.mensagem}
+                  onChange={handleChange}
+                  className={`${styles.textarea} ${
+                    errors.mensagem ? styles.error : ""
+                  }`}
+                />
+                {errors.mensagem && (
+                  <span className={styles.errorMessage}>{errors.mensagem}</span>
+                )}
+              </div>
+
               <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={isSubmitting}
+                disabled={isSubmitting || (formTouched && !isFormValid())}
               >
                 {isSubmitting ? "Enviando..." : "Enviar"}
+                {isSubmitting && <div className={styles.loadingSpinner} />}
               </button>
             </form>
+
+            <div className={styles.copyright}>
+              <div className={styles.logoContainer}>
+                <a
+                  href="https://www.unitycomunicacao.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={logoUnity}
+                    alt="Unity Comunicação Logo"
+                    className={styles.logo}
+                  />
+                </a>
+              </div>
+              <p>
+                © Copyright 2025 Unity Comunicação. Todos os direitos
+                reservados.
+              </p>
+              <div className={styles.socialIcons}>
+                <a
+                  href="https://www.instagram.com/__unitycom"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialIcon}
+                >
+                  <FaInstagram />
+                </a>
+                <a
+                  href="https://www.facebook.com/profile.php?id=100054564694262"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialIcon}
+                >
+                  <FaFacebookF />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
