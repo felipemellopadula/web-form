@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root {
+  --color-brand-1: #f6f5f2;
+  --color-brand-2: #f0ebe3;
+  --color-brand-3: #f5efff;
+  --grey-1: #212529;
+  --grey-2: #868e96;
+  --grey-3: #adb5bd;
+  --grey-4: #e9ecef;
+  --grey-5: #e9ecef;
+  --grey-6: #e9ecef;
+  --grey-7: #b2b2b2;
+  --grey-8: #d0dcf0;
+  --mode: #ffffff;
+  --font-family1: "Open Sans", sans-serif;
+  --font-family2: "SUSE", sans-serif;
+  --font-family3: "Sevillana", cursive;
+  --font-weight1: 300;
+  --font-weight2: 500;
+  --font-weight3: 700;
+  --font-weight4: 900;
+}
+
+body {
+  background-color: var(--mode);
+  scroll-behavior: smooth;
+}

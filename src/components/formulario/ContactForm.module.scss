@@ -1,0 +1,110 @@
+.container {
+  container: main / inline-size;
+  width: 100svw;
+  height: 100svh;
+  .maincontainer {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    width: 100%;
+    height: 100%;
+    .leftSide {
+      grid-column: 1 / 2;
+      background-color: var(--grey-8);
+      .content {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        width: 50%;
+        margin: 0 auto;
+        height: 100%;
+        gap: 2rem;
+      }
+      h1 {
+        font-size: 4rem;
+        font-family: var(--font-family1);
+        font-weight: var(--font-weight3);
+      }
+      video {
+        width: 70%;
+      }
+    }
+    .rightSide {
+      background-color: black;
+      .contactFormContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        max-width: 31.25rem;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #000000;
+        color: #e4e4e4;
+        font-family: Arial, sans-serif;
+      }
+
+      .title {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .select,
+      .input,
+      .textarea {
+        width: 100%;
+        padding: 12px;
+        background-color: black;
+        border: none;
+        border-bottom: 1px solid #333;
+        color: #ffffff;
+        font-size: 16px;
+
+        &:focus {
+          outline: none;
+          border-bottom-color: #0000ff;
+        }
+
+        &::placeholder {
+          color: #666;
+        }
+      }
+
+      .select {
+        appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px top 50%;
+        padding-right: 30px;
+      }
+
+      .textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .submitButton {
+        align-self: flex-start;
+        padding: 12px 24px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #444;
+        }
+      }
+    }
+  }
+}
