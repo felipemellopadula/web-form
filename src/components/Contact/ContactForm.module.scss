@@ -15,8 +15,10 @@
     }
 
     .leftSide {
+      --font-family1: "Open Sans", sans-serif;
+      font-weight: 700;
       grid-column: 1 / 2;
-      background-color: var(--grey-8);
+      background-color: #d0dcf0;
 
       @container main (max-width: 64rem) {
         grid-column: 1;
@@ -32,7 +34,7 @@
         width: 50%;
         margin: 0 auto;
         height: 100%;
-        gap: 2rem;
+        gap: 1.5rem;
 
         @container main (max-width: 75rem) {
           width: 70%;
@@ -47,14 +49,14 @@
       }
 
       h1 {
-        font-size: clamp(1.5rem, 0.405rem + 2.883vw, 3rem);
+        font-size: clamp(2rem, 0.405rem + 2.883vw, 3rem);
         font-family: var(--font-family1);
         font-weight: var(--font-weight3);
       }
     }
 
     video {
-      width: 80%;
+      width: 90%;
 
       @container main (max-width: 64rem) {
         width: 100%;
@@ -87,7 +89,7 @@
       }
 
       .title {
-        font-size: clamp(1.5rem, 1.351rem + 0.721vw, 2rem);
+        font-size: clamp(1rem, 1.351rem + 0.721vw, 2rem);
         font-weight: bold;
         margin-bottom: 30px;
 
