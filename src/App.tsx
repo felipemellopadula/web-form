@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Contact } from "./components/Contact";
 import { Calendar } from "./components/Calender";
+import "./css/index.css";
 
 function App() {
   return (

@@ -7,7 +7,6 @@ import logoUnity from "../../assets/Logo_Unity.png";
 import videoForm from "../../assets/ani02-3.mp4";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
-// Importe o useNavigate
 import { useNavigate } from "react-router-dom";
 
 interface FormData {
@@ -43,11 +42,7 @@ export const Contact: React.FC = () => {
     threshold: 0.1,
   });
 
-  // Inicialize o navigate
   const navigate = useNavigate();
-
-  // Remova a inicialização do EmailJS do useEffect, pois não é mais necessário
-  // emailjs.init() não é mais recomendado
 
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {};
@@ -94,11 +89,13 @@ export const Contact: React.FC = () => {
 
       try {
         const templateParams = {
+          to_name: "Unity Comunicação",
           from_name: formData.nome,
-          from_email: formData.email,
-          phone: formData.telefone,
-          company: formData.empresa,
-          message: formData.mensagem,
+          nome: formData.nome,
+          email: formData.email,
+          celular: formData.telefone,
+          empresa: formData.empresa,
+          mensagem: formData.mensagem,
         };
 
         await emailjs.send(
@@ -108,7 +105,6 @@ export const Contact: React.FC = () => {
           "I6CDkyIieBMlS_ptU"
         );
 
-        alert("Mensagem enviada com sucesso!");
         setFormData({
           nome: "",
           email: "",
@@ -118,11 +114,9 @@ export const Contact: React.FC = () => {
         });
         setFormTouched(false);
 
-        // Redirecione para o componente Calender
         navigate("/calender");
       } catch (error) {
         console.error("Erro ao enviar formulário:", error);
-        alert("Erro ao enviar mensagem. Por favor, tente novamente.");
       } finally {
         setIsSubmitting(false);
       }
