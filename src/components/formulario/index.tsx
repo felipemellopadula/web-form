@@ -82,9 +82,8 @@ export const Contact = () => {
                 onChange={handleChange}
                 className={styles.textarea}
               />
-
               <button type="submit" className={styles.submitButton}>
-                Submit
+                Enviar
               </button>
             </form>
           </div>
